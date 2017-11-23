@@ -22,10 +22,10 @@ data Direction = NORTH
   deriving (Show, Eq, Ord)
 
 data Robot =
-  Robot {
+  ValidRobot {
       position :: Position
     , facing :: Direction
-  }
+  } | InvalidRobot
   deriving (Show, Eq)
 
 data Command = PLACE Position Direction
@@ -64,12 +64,12 @@ mkDirection direction = if True
 
 mkRobotFromDetails :: Coord -> Coord -> Direction -> Validated Robot
 mkRobotFromDetails x y direction =
-  Robot
+  ValidRobot
   <$> mkPositionFromCoords x y
   <*> mkDirection direction
 
 mkRobot :: Position -> Direction -> Validated Robot
 mkRobot position direction =
-  Robot
+  ValidRobot
   <$> mkPosition position
   <*> mkDirection direction

@@ -10,6 +10,7 @@ import Lib
 import Parsers
 import Commands
 import Models
+import qualified Helpers as H
 
 
 main :: IO ()
@@ -20,8 +21,5 @@ main = forever $ do
 simulate :: RobotState
 simulate = forever $ do
   cmdStr <- liftIO getLine
-  cmd <- liftMaybe $ parseCommand cmdStr
+  cmd <- H.liftMaybe $ parseCommand cmdStr
   runCommand cmd
-
-liftMaybe :: (MonadPlus m) => Maybe a -> m a
-liftMaybe = maybe mzero return
