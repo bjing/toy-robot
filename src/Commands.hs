@@ -12,6 +12,8 @@ type RobotState = StateT Robot (MaybeT IO) ()
 
 runCommand :: Command -> RobotState
 runCommand LEFT = turnLeft
+runCommand RIGHT = turnRight
+runCommand MOVE = move
 runCommand REPORT = do
   robot <- get
   liftIO $ print robot
