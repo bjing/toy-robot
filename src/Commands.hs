@@ -16,6 +16,20 @@ runCommand REPORT = do
   robot <- get
   liftIO $ print robot
 
+move :: RobotState
+move = do
+  robot <- get
+  let currentFacing = facing robot
+  let currentX = x $ position robot
+  let currentY = y $ position robot
+  put $ move' currentX currentY currentFacing
+
+move' :: Coord -> Coord -> Direction -> Robot
+move' x y NORTH = Robot (Position x (y+1)) NORTH
+move' x y SOUTH = Robot (Position x (y-1)) SOUTH
+move' x y EAST  = Robot (Position (x+1) y) EAST
+move' x y WEST  = Robot (Position (x-1) y) WEST
+
 turnLeft :: RobotState
 turnLeft = do
   robot <- get
@@ -26,6 +40,18 @@ turnLeft = do
                     WEST -> SOUTH
                     SOUTH -> EAST
                     EAST -> NORTH
+  put $ Robot currentPostion newFacing
+
+turnRight :: RobotState
+turnRight = do
+  robot <- get
+  let currentFacing = facing robot
+  let currentPostion = position robot
+  let newFacing = case currentFacing of
+                    NORTH -> EAST
+                    EAST -> SOUTH
+                    SOUTH -> WEST
+                    WEST -> NORTH
   put $ Robot currentPostion newFacing
 
 initialState :: Robot

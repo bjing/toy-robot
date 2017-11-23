@@ -31,6 +31,24 @@ spec = do
       let initState = Robot (Position 0 0) EAST
       assertEquals turnLeft initState (Robot (Position 0 0) NORTH)
 
+  describe "turnRight" $
+      it "should turn robot right" $ do
+        let initState = Robot (Position 0 0) NORTH
+        assertEquals turnRight initState (Robot (Position 0 0) EAST)
+        let initState = Robot (Position 0 0) EAST
+        assertEquals turnRight initState (Robot (Position 0 0) SOUTH)
+        let initState = Robot (Position 0 0) SOUTH
+        assertEquals turnRight initState (Robot (Position 0 0) WEST)
+        let initState = Robot (Position 0 0) WEST
+        assertEquals turnRight initState (Robot (Position 0 0) NORTH)
+
+  describe "move" $
+    it "should move robot one step forward" $ do
+      let initState = Robot (Position 0 0) NORTH
+      assertEquals move initState (Robot (Position 0 1) NORTH)
+      let initState = Robot (Position 0 0) EAST
+      assertEquals move initState (Robot (Position 1 0) EAST)
+
   describe "Initial state" $
     it "should be initial state" $
       initialState `shouldBe` Robot (Position 0 0) NORTH
