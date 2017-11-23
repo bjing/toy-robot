@@ -13,4 +13,4 @@ spec =
       parseCommand "LEFT" `shouldBe` Just LEFT
       parseCommand "RIGHT" `shouldBe` Just RIGHT
       parseCommand "REPORT" `shouldBe` Just REPORT
-      parseCommand "PLACE 3,3,EAST" `shouldBe` Just (PLACE (Position 3 3) EAST)
+      parseCommand "PLACE" `shouldBe` Just (PLACE (Position 3 3) EAST)
