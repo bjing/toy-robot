@@ -15,9 +15,13 @@ import Models
 main :: IO ()
 main = forever $ do
   putStrLn "Please start typing commands"
-  cmdStr <- getLine
+  runMaybeT $ runStateT simulate initialState
+
+simulate :: RobotState
+simulate = forever $ do
+  cmdStr <- liftIO getLine
   cmd <- liftMaybe $ parseCommand cmdStr
-  runMaybeT $ runStateT (runCommand cmd) initialState
+  runCommand cmd
 
 liftMaybe :: (MonadPlus m) => Maybe a -> m a
 liftMaybe = maybe mzero return
