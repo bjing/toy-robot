@@ -89,3 +89,16 @@ spec = do
       assertEquals (turn RIGHT) (ValidRobot pos SOUTH) (ValidRobot pos WEST)
       assertEquals (turn RIGHT) (ValidRobot pos EAST) (ValidRobot pos SOUTH)
       assertEquals (turn RIGHT) (ValidRobot pos WEST) (ValidRobot pos NORTH)
+
+  describe "Helper functions" $ do
+    describe "updateRobotStateIfNecessary" $ do
+      let initRobotState = ValidRobot (Position 2 3) EAST
+      let newRobotState = ValidRobot (Position 2 4) EAST
+      it "should update robot state if given a new robot state" $
+        assertEquals (updateRobotStateIfNecessary (Just newRobotState)) initRobotState newRobotState
+      it "should not upate robot state if not given a robot" $
+        assertEquals (updateRobotStateIfNecessary Nothing) initRobotState initRobotState
+    describe "idle" $
+      it "should leave the robot idle and not do anything" $ do
+        let initRobotState = ValidRobot (Position 2 3) EAST
+        assertEquals idle initRobotState initRobotState
