@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Main where
 
 import Control.Monad.Trans.State
@@ -9,32 +11,34 @@ import System.Environment
 import qualified Data.Text as T
 
 import Lib
-import Parsers
 import Commands
+import Parsers
 import Models
-import qualified Helpers as H
+import Simulation
 
 main :: IO ()
 main = do
   args <- getArgs
   case args of
-    (inputFilePath:_) -> do
-      _ <- runMaybeT $ runStateT (simulateFromFile inputFilePath) initRobotState
-      return ()
-    [] -> forever $ do
-      _ <- runMaybeT $ runStateT simulateFromStdin initRobotState
-      return ()
+    (inputFilePath:_) -> runStandard inputFilePath
+    [] -> runRepl
 
-simulateFromStdin :: RobotState
-simulateFromStdin = forever $ do
-  liftIO $ putStrLn "Please start typing commands"
-  cmdStr <- liftIO getLine
-  let cmd = parseCommand (T.pack cmdStr)
-  runCommand cmd
+runStandard :: String -> IO ()
+runStandard inputFilePath = do
+  _ <- runMaybeT $ runStateT (simulateFromFile getCmdFromFile inputFilePath) initRobotState
+  return ()
 
-simulateFromFile :: FilePath -> RobotState
-simulateFromFile filePath = do
-  content <- liftIO $ readFile filePath
+runRepl :: IO ()
+runRepl = forever $ do
+  putStrLn "Please start typing commands"
+  _ <- runMaybeT $ runStateT (simulateFromStdin getCmdFromStdin) initRobotState
+  return ()
+
+getCmdFromStdin :: IO String
+getCmdFromStdin = getLine
+
+getCmdFromFile :: FilePath -> IO [String]
+getCmdFromFile filePath = do
+  content <- readFile filePath
   let cmdStrs = lines content
-  let cmds = fmap (parseCommand . T.pack) cmdStrs
-  mapM_ runCommand cmds
+  return cmdStrs
