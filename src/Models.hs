@@ -80,3 +80,6 @@ mkRobot position direction =
   ValidRobot
   <$> mkPosition position
   <*> mkDirection direction
+
+initRobotState :: Robot
+initRobotState = InvalidRobot

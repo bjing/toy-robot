@@ -17,7 +17,7 @@ import qualified Helpers as H
 main :: IO ()
 main = forever $ do
   putStrLn "Please start typing commands"
-  runMaybeT $ runStateT simulate initialState
+  runMaybeT $ runStateT simulate initRobotState
 
 simulate :: RobotState
 simulate = forever $ do

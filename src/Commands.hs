@@ -5,6 +5,7 @@ import Control.Monad.Trans.State
 import Control.Monad.Trans.Maybe
 import Control.Monad.Trans.Class
 import Control.Monad.IO.Class
+import Control.Monad
 import Control.Lens
 import Data.Validation
 import qualified Data.Map as M
@@ -15,12 +16,16 @@ import qualified Helpers as H
 type RobotState = StateT Robot (MaybeT IO) ()
 
 runCommand :: Maybe Command -> RobotState
-runCommand (Just LEFT) = turn LEFT
-runCommand (Just RIGHT) = turn RIGHT
-runCommand (Just MOVE) = move
-runCommand (Just REPORT) = report
 runCommand (Just (PLACE pos dir)) = place pos dir
-runCommand Nothing = return ()
+runCommand (Just command) = do
+  robotState <- get
+  guard (robotState /= InvalidRobot)
+  case command of
+    MOVE -> move
+    LEFT -> turn LEFT
+    RIGHT -> turn RIGHT
+    REPORT -> report
+runCommand Nothing = idle
 
 move :: RobotState
 move = do
@@ -59,9 +64,9 @@ report = do
   robot <- get
   liftIO $ print robot
 
+idle :: RobotState
+idle = return ()
+
 updateRobotStateIfNecessary :: Maybe Robot -> RobotState
 updateRobotStateIfNecessary (Just robot) = put robot
 updateRobotStateIfNecessary Nothing = return ()
-
-initialState :: Robot
-initialState = InvalidRobot

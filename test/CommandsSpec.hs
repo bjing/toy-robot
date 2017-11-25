@@ -18,15 +18,34 @@ assertEquals command initRobotState expected = do
 spec :: Spec
 spec = do
   describe "runCommand" $ do
-    let validRobotState = ValidRobot (Position 2 3) NORTH
-    it "should move given a move command" $
-      assertEquals (runCommand $ Just MOVE) validRobotState (ValidRobot (Position 2 4) NORTH)
-    it "should turn left given a LEFT command" $
-      assertEquals (runCommand $ Just LEFT) validRobotState (ValidRobot (Position 2 3) WEST)
-    it "should turn left given a RIGHT command" $
-      assertEquals (runCommand $ Just RIGHT) validRobotState (ValidRobot (Position 2 3) EAST)
-    it "should PLACE robot given a PLACE command" $
-      assertEquals (runCommand $ Just $ PLACE (Position 0 0) EAST) validRobotState (ValidRobot (Position 0 0) EAST)
+    context "when robot is in invalid state" $ do
+      let inValidRobotState = InvalidRobot
+
+      it "should ignore MOVE command" $
+        assertEquals (runCommand $ Just MOVE) inValidRobotState InvalidRobot
+      it "should ignore LEFT command" $
+        assertEquals (runCommand $ Just LEFT) inValidRobotState InvalidRobot
+      it "should ignore RIGHT command" $
+        assertEquals (runCommand $ Just RIGHT) inValidRobotState InvalidRobot
+      it "should ignore REPORT command" $
+        assertEquals (runCommand $ Just REPORT) inValidRobotState InvalidRobot
+      it "should ignore invalid PLACE command" $
+        assertEquals (runCommand $ Just $ PLACE (Position 5 0) EAST) inValidRobotState InvalidRobot
+      it "should place robot" $
+        assertEquals (runCommand $ Just $ PLACE (Position 0 0) EAST) inValidRobotState (ValidRobot (Position 0 0) EAST)
+
+    context "when robot is in valid state" $ do
+      let validRobotState = ValidRobot (Position 2 3) NORTH
+      it "should move given a move command" $
+        assertEquals (runCommand $ Just MOVE) validRobotState (ValidRobot (Position 2 4) NORTH)
+      it "should turn left given a LEFT command" $
+        assertEquals (runCommand $ Just LEFT) validRobotState (ValidRobot (Position 2 3) WEST)
+      it "should turn left given a RIGHT command" $
+        assertEquals (runCommand $ Just RIGHT) validRobotState (ValidRobot (Position 2 3) EAST)
+      it "should PLACE robot given a PLACE command" $
+        assertEquals (runCommand $ Just $ PLACE (Position 0 0) EAST) validRobotState (ValidRobot (Position 0 0) EAST)
+      it "should leave robot if attempting to place it off board" $
+        assertEquals (runCommand $ Just $ PLACE (Position 5 4) EAST) validRobotState validRobotState
 
   describe "Move command" $ do
     it "should move one step forward when able" $ do
