@@ -21,7 +21,7 @@ main = do
     (inputFilePath:_) -> do
       _ <- runMaybeT $ runStateT (simulateFromFile inputFilePath) initRobotState
       return ()
-    [] -> do
+    [] -> forever $ do
       _ <- runMaybeT $ runStateT simulateFromStdin initRobotState
       return ()
 
