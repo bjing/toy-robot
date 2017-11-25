@@ -22,5 +22,5 @@ main = forever $ do
 simulate :: RobotState
 simulate = forever $ do
   cmdStr <- liftIO getLine
-  cmd <- H.liftMaybe $ parseCommand (T.pack cmdStr)
+  let cmd = parseCommand (T.pack cmdStr)
   runCommand cmd

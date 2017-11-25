@@ -20,13 +20,13 @@ spec = do
   describe "runCommand" $ do
     let validRobotState = ValidRobot (Position 2 3) NORTH
     it "should move given a move command" $
-      assertEquals (runCommand MOVE) validRobotState (ValidRobot (Position 2 4) NORTH)
+      assertEquals (runCommand $ Just MOVE) validRobotState (ValidRobot (Position 2 4) NORTH)
     it "should turn left given a LEFT command" $
-      assertEquals (runCommand LEFT) validRobotState (ValidRobot (Position 2 3) WEST)
+      assertEquals (runCommand $ Just LEFT) validRobotState (ValidRobot (Position 2 3) WEST)
     it "should turn left given a RIGHT command" $
-      assertEquals (runCommand RIGHT) validRobotState (ValidRobot (Position 2 3) EAST)
+      assertEquals (runCommand $ Just RIGHT) validRobotState (ValidRobot (Position 2 3) EAST)
     it "should PLACE robot given a PLACE command" $
-      assertEquals (runCommand $ PLACE (Position 0 0) EAST) validRobotState (ValidRobot (Position 0 0) EAST)
+      assertEquals (runCommand $ Just $ PLACE (Position 0 0) EAST) validRobotState (ValidRobot (Position 0 0) EAST)
 
   describe "Move command" $ do
     it "should move one step forward when able" $ do

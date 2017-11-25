@@ -14,12 +14,13 @@ import qualified Helpers as H
 
 type RobotState = StateT Robot (MaybeT IO) ()
 
-runCommand :: Command -> RobotState
-runCommand LEFT = turn LEFT
-runCommand RIGHT = turn RIGHT
-runCommand MOVE = move
-runCommand REPORT = report
-runCommand (PLACE pos dir) = place pos dir
+runCommand :: Maybe Command -> RobotState
+runCommand (Just LEFT) = turn LEFT
+runCommand (Just RIGHT) = turn RIGHT
+runCommand (Just MOVE) = move
+runCommand (Just REPORT) = report
+runCommand (Just (PLACE pos dir)) = place pos dir
+runCommand Nothing = return ()
 
 move :: RobotState
 move = do
