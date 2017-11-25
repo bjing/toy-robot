@@ -1,8 +1,7 @@
-module CommandsSpec where
+{-# LANGUAGE OverloadedStrings #-}
 
-import Control.Monad.Trans.State
-import Control.Monad.Trans.Maybe
-import Control.Monad.IO.Class
+module CommandsSpec (spec) where
+
 import Test.Hspec
 
 import Models
@@ -11,10 +10,19 @@ import TestHelpers
 
 spec :: Spec
 spec = do
+  let inValidRobotState = InvalidRobot
+  describe "runCommands" $ do
+    context "when a series of commands start with PLACE command" $
+      it "should run all the commands" $ do
+        let cmds = fmap Just [PLACE (Position 2 3) NORTH, MOVE, LEFT, MOVE]
+        assertEquals (runCommands cmds) inValidRobotState (ValidRobot (Position 1 4) WEST)
+    context "when a series of commands doesn't start with PLACE command " $
+      it "should run all commands from the first PLACE command" $ do
+        let cmds = fmap Just [MOVE, LEFT, PLACE (Position 2 3) NORTH, MOVE, LEFT, MOVE]
+        assertEquals (runCommands cmds) inValidRobotState (ValidRobot (Position 1 4) WEST)
+
   describe "runCommand" $ do
     context "when robot is in invalid state" $ do
-      let inValidRobotState = InvalidRobot
-
       it "should ignore MOVE command" $
         assertEquals (runCommand $ Just MOVE) inValidRobotState InvalidRobot
       it "should ignore LEFT command" $
@@ -85,6 +93,14 @@ spec = do
       assertEquals (turn RIGHT) (ValidRobot pos WEST) (ValidRobot pos NORTH)
 
   describe "Helper functions" $ do
+    describe "isNotPlaceCmd" $ do
+      it "should return True for non-PLACE commands" $ do
+        isNotPlaceCmd (Just MOVE) `shouldBe` True
+        isNotPlaceCmd (Just REPORT) `shouldBe` True
+        isNotPlaceCmd (Just LEFT) `shouldBe` True
+        isNotPlaceCmd (Just RIGHT) `shouldBe` True
+      it "should return False for PLACE commands" $
+        isNotPlaceCmd (Just (PLACE (Position 2 3) SOUTH)) `shouldBe` False
     describe "updateRobotStateIfNecessary" $ do
       let initRobotState = ValidRobot (Position 2 3) EAST
       let newRobotState = ValidRobot (Position 2 4) EAST
@@ -92,7 +108,3 @@ spec = do
         assertEquals (updateRobotStateIfNecessary (Just newRobotState)) initRobotState newRobotState
       it "should not upate robot state if not given a robot" $
         assertEquals (updateRobotStateIfNecessary Nothing) initRobotState initRobotState
-    describe "idle" $
-      it "should leave the robot idle and not do anything" $ do
-        let initRobotState = ValidRobot (Position 2 3) EAST
-        assertEquals idle initRobotState initRobotState

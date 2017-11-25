@@ -15,6 +15,11 @@ import qualified Helpers as H
 
 type RobotState = StateT Robot (MaybeT IO) ()
 
+runCommands :: [Maybe Command] -> RobotState
+runCommands cmds = do
+  let filteredCmds = dropWhile isNotPlaceCmd cmds
+  mapM_ runCommand filteredCmds
+
 runCommand :: Maybe Command -> RobotState
 runCommand (Just (PLACE pos dir)) = place pos dir
 runCommand (Just command) = do
@@ -70,3 +75,7 @@ idle = return ()
 updateRobotStateIfNecessary :: Maybe Robot -> RobotState
 updateRobotStateIfNecessary (Just robot) = put robot
 updateRobotStateIfNecessary Nothing = return ()
+
+isNotPlaceCmd :: Maybe Command -> Bool
+isNotPlaceCmd (Just (PLACE _ _)) = False
+isNotPlaceCmd _ = True

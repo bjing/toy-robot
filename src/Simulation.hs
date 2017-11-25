@@ -25,4 +25,4 @@ simulateFromFile :: FileReader -> FilePath -> StateT Robot (MaybeT IO) ()
 simulateFromFile reader filePath = do
   cmdStrs <- liftIO $ reader filePath
   let cmds = fmap (parseCommand . T.pack) cmdStrs
-  mapM_ runCommand cmds
+  runCommands cmds

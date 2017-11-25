@@ -14,6 +14,11 @@ testCommandsC = ["PLACE 1,2,EAST", "MOVE", "MOVE", "LEFT", "MOVE"]
 expectedResultC = ValidRobot (Position 3 3) NORTH
 testCommandsThatDontStartWithPlace = ["MOVE", "DIG", "PLACE 1,2,SOUTH", "MOVE"]
 expectedResultNonPlaceStart = ValidRobot (Position 1 1) SOUTH
+testCommandsMany = [
+  "PLACE -1,5,NORTH", "PLACE 0,0,NORTH", "MOVE", "MOVE", "MOVE", "RIGHT", "PLACE 3,3,NORTH",
+  "MOVE", "LEFT", "MOVE", "PLACE 10,10,EAST", "MOVE", "MOVE"
+  ]
+expectedResultMany = ValidRobot (Position 0 4) WEST
 testCommandsEmpty = []
 expectedResultEmpty = InvalidRobot
 
@@ -29,6 +34,8 @@ spec = do
       assertEquals (simulateFromFile testFileReaderB "file") initialRobotState expectedResultB
       let testFileReaderC _ = return testCommandsC
       assertEquals (simulateFromFile testFileReaderC "file") initialRobotState expectedResultC
+      let testFileReaderMany _ = return testCommandsMany
+      assertEquals (simulateFromFile testFileReaderMany "file") initialRobotState expectedResultMany
 
     it "should ignore commands from start of the file until it sees PLACE" $ do
       let testFileReaderManyMore _ = return testCommandsThatDontStartWithPlace
