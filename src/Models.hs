@@ -13,7 +13,11 @@ data Error = CoordOutOfRangeError
 data Position = Position {
     x :: Coord
   , y :: Coord
-} deriving (Show, Eq, Ord)
+} deriving (Eq, Ord)
+
+instance Show Position where
+  show position =
+    show (x position) ++ "," ++ show (y position)
 
 data Direction = NORTH
   | SOUTH
@@ -26,7 +30,10 @@ data Robot =
       position :: Position
     , facing :: Direction
   } | InvalidRobot
-  deriving (Show, Eq)
+  deriving (Eq)
+
+instance Show Robot where
+    show (ValidRobot pos dir) = show pos ++ "," ++ show dir
 
 data Command = PLACE Position Direction
   | MOVE
