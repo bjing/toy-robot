@@ -21,6 +21,8 @@ library
                      , Commands
                      , Helpers
                      , Simulation
+                     , CommandsImpl
+                     , ParsersImpl
   build-depends:       base >= 4.7 && < 5
                      , transformers
                      , mtl

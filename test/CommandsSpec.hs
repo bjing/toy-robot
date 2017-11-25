@@ -6,6 +6,7 @@ import Test.Hspec
 
 import Models
 import Commands
+import CommandsImpl
 import TestHelpers
 
 spec :: Spec
@@ -51,30 +52,30 @@ spec = do
 
   describe "Move command" $ do
     it "should move one step forward when able" $ do
-      assertEquals move (ValidRobot (Position 2 3) NORTH) (ValidRobot (Position 2 4) NORTH)
-      assertEquals move (ValidRobot (Position 2 3) SOUTH) (ValidRobot (Position 2 2) SOUTH)
-      assertEquals move (ValidRobot (Position 2 3) EAST) (ValidRobot (Position 3 3) EAST)
-      assertEquals move (ValidRobot (Position 2 3) WEST) (ValidRobot (Position 1 3) WEST)
+      assertEquals moveRobot (ValidRobot (Position 2 3) NORTH) (ValidRobot (Position 2 4) NORTH)
+      assertEquals moveRobot (ValidRobot (Position 2 3) SOUTH) (ValidRobot (Position 2 2) SOUTH)
+      assertEquals moveRobot (ValidRobot (Position 2 3) EAST) (ValidRobot (Position 3 3) EAST)
+      assertEquals moveRobot (ValidRobot (Position 2 3) WEST) (ValidRobot (Position 1 3) WEST)
     it "should not move robot off board" $ do
       let robot1 = ValidRobot (Position 2 4) NORTH
-      assertEquals move robot1 robot1
+      assertEquals moveRobot robot1 robot1
       let robot2 = ValidRobot (Position 2 0) SOUTH
-      assertEquals move robot2 robot2
+      assertEquals moveRobot robot2 robot2
       let robot3 = ValidRobot (Position 4 0) EAST
-      assertEquals move robot3 robot3
+      assertEquals moveRobot robot3 robot3
       let robot4 = ValidRobot (Position 0 4) WEST
-      assertEquals move robot4 robot4
+      assertEquals moveRobot robot4 robot4
 
   describe "Place command" $ do
     it "should place robot on board" $ do
       let initState = ValidRobot (Position 0 0) EAST
-      assertEquals (place (Position 1 2) NORTH) initState (ValidRobot (Position 1 2) NORTH)
+      assertEquals (placeRobot (Position 1 2) NORTH) initState (ValidRobot (Position 1 2) NORTH)
     it "should leave robot alone if attempting to put it off board" $ do
       let initState = ValidRobot (Position 0 0) EAST
-      assertEquals (place (Position 1 (-1)) NORTH) initState initState
-      assertEquals (place (Position (-1) 1) NORTH) initState initState
-      assertEquals (place (Position 5 1) NORTH) initState initState
-      assertEquals (place (Position 1 5) NORTH) initState initState
+      assertEquals (placeRobot (Position 1 (-1)) NORTH) initState initState
+      assertEquals (placeRobot (Position (-1) 1) NORTH) initState initState
+      assertEquals (placeRobot (Position 5 1) NORTH) initState initState
+      assertEquals (placeRobot (Position 1 5) NORTH) initState initState
 
   describe "Left command" $
     it "should turn robot left" $ do

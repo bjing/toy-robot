@@ -1,15 +1,27 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module ParsersSpec where
-
-import Test.Hspec
+module ParsersSpec (spec) where
 
 import Parsers
+import ParsersImpl
 import Models
-import qualified TestHelpers as TH
+import TestHelpers
+import Test.Hspec
 
 spec :: Spec
 spec = do
+  describe "All command parsers" $ do
+    it "should ignore character cases" $ do
+      parseCommand "place 4,3,noRth" `shouldBe` (Just $ PLACE (Position 4 3) NORTH)
+      parseCommand "mOve" `shouldBe` Just MOVE
+      parseCommand "lefT" `shouldBe` Just LEFT
+      parseCommand "Right" `shouldBe` Just RIGHT
+      parseCommand "RePoRt" `shouldBe` Just REPORT
+    it "should not accept invalid commands" $ do
+      parseCommand "ATTACK 1,2,EAST" `shouldBe` Nothing
+      parseCommand "FLY 1,2,EAST" `shouldBe` Nothing
+      parseCommand "PLACEON 1,2,EAST" `shouldBe` Nothing
+
   describe "Place command parser" $ do
     it "should accept correct commands" $ do
       parsePlaceCommand "PLACE 4,3,NORTH" `shouldBe` (Just $ PLACE (Position 4 3) NORTH)
@@ -32,15 +44,15 @@ spec = do
 
   describe "Position command parser" $ do
     it "should parse valid positions" $ do
-      parsePosition (TH.createPositionInput "3,4") `shouldBe` Just (Position 3 4)
-      parsePosition (TH.createPositionInput "0,0") `shouldBe` Just (Position 0 0)
-      parsePosition (TH.createPositionInput "4,4") `shouldBe` Just (Position 4 4)
+      parsePosition (createPositionInput "3,4") `shouldBe` Just (Position 3 4)
+      parsePosition (createPositionInput "0,0") `shouldBe` Just (Position 0 0)
+      parsePosition (createPositionInput "4,4") `shouldBe` Just (Position 4 4)
     it "should not accept invalid coordinates" $ do
-      parsePosition (TH.createPositionInput "-1,3") `shouldBe` Nothing
-      parsePosition (TH.createPositionInput "1,-3") `shouldBe` Nothing
-      parsePosition (TH.createPositionInput "-1,-3") `shouldBe` Nothing
-      parsePosition (TH.createPositionInput "1,5") `shouldBe` Nothing
-      parsePosition (TH.createPositionInput "") `shouldBe` Nothing
+      parsePosition (createPositionInput "-1,3") `shouldBe` Nothing
+      parsePosition (createPositionInput "1,-3") `shouldBe` Nothing
+      parsePosition (createPositionInput "-1,-3") `shouldBe` Nothing
+      parsePosition (createPositionInput "1,5") `shouldBe` Nothing
+      parsePosition (createPositionInput "") `shouldBe` Nothing
 
   describe "Other command parsers" $ do
     it "should parse MOVE command" $
