@@ -5,6 +5,7 @@ import Control.Monad.Trans.Maybe
 import Control.Monad.Trans.Class
 import Control.Monad.IO.Class
 import Control.Monad
+import qualified Data.Text as T
 
 import Lib
 import Parsers
@@ -21,5 +22,5 @@ main = forever $ do
 simulate :: RobotState
 simulate = forever $ do
   cmdStr <- liftIO getLine
-  cmd <- H.liftMaybe $ parseCommand cmdStr
+  cmd <- H.liftMaybe $ parseCommand (T.pack cmdStr)
   runCommand cmd
