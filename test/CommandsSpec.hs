@@ -7,13 +7,7 @@ import Test.Hspec
 
 import Models
 import Commands
-
--- A helper function to help us do assertions
-assertEquals command initRobotState expected = do
-  maybeRobot <- runMaybeT $ execStateT command initRobotState
-  case maybeRobot of
-    Just actual -> actual `shouldBe` expected
-    Nothing -> InvalidRobot `shouldBe` expected
+import TestHelpers
 
 spec :: Spec
 spec = do
