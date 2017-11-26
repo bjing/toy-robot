@@ -37,9 +37,12 @@ Under the project's root directory, run
 ```
 stack exec toy-robot-exe "path_to_input_file"
 ```
-For example:
+### Run through all test files:
 ```
-stack exec toy-robot-exe "resources/input.txt"
+stack exec toy-robot-exe "resources/input.1.txt"
+stack exec toy-robot-exe "resources/input.2.txt"
+stack exec toy-robot-exe "resources/input.3.txt"
+stack exec toy-robot-exe "resources/input.empty.txt"
 ```
 
 ## Run tests
