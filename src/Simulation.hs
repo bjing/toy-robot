@@ -10,12 +10,10 @@ import qualified Data.Text as T
 import Commands
 import Parsers
 import Models
+import IOReaders
 import Common
 
-type StdinReader = IO String
-type FileReader = FilePath -> IO [String]
-
--- Type RobotState is defined in Common.hs
+-- Type RobotState are defined in Common.hs
 
 simulateFromStdin :: StdinReader -> RobotState
 simulateFromStdin stdinReader = forever $ do

@@ -12,6 +12,7 @@ import qualified Data.Text as T
 
 import Models
 import Simulation
+import IOReaders
 
 main :: IO ()
 main = do
@@ -22,21 +23,10 @@ main = do
 
 runFromFile :: String -> IO ()
 runFromFile inputFilePath = do
-  _ <- runMaybeT $ runStateT (simulateFromFile getCmdFromFile inputFilePath) initRobotState
+  _ <- runMaybeT $ runStateT (simulateFromFile getCmdsFromFile inputFilePath) initRobotState
   return ()
 
 runRepl :: IO ()
 runRepl = forever $ do
   putStrLn "Please start typing commands"
-  runMaybeT $ runStateT (simulateFromStdin getCmdFromStdin) initRobotState
-
--- The following I/O functions are seprated out and passed into the simulation
--- functions (simulateFromFile, simulateFromStdin) as arguments so the simulation functions
--- can be unit-tested
-getCmdFromStdin :: IO String
-getCmdFromStdin = getLine
-
-getCmdFromFile :: FilePath -> IO [String]
-getCmdFromFile filePath = do
-  content <- readFile filePath
-  return $ lines content
+  runMaybeT $ runStateT (simulateFromStdin getCmdsFromStdin) initRobotState
