@@ -2,11 +2,11 @@ name:                toy-robot
 version:             0.1.0.0
 -- synopsis:
 -- description:
-homepage:            https://github.com/githubuser/toy-robot#readme
+homepage:            https://github.com/bjing/toy-robot#readme
 license:             BSD3
 license-file:        LICENSE
 author:              Brian Jing
-maintainer:          brianjing404@gmail.com
+maintainer:          Email address
 copyright:           2017 Brian Jing
 category:            Web
 build-type:          Simple
@@ -63,4 +63,4 @@ test-suite toy-robot-test
 
 source-repository head
   type:     git
-  location: https://github.com/githubuser/toy-robot
+  location: https://github.com/bjing/toy-robot

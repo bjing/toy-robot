@@ -13,6 +13,8 @@ brew install haskell-stack
 ```
 
 ## Build the project
+Please make sure the project has been built before running the app.
+
 Under the project's root directory, run
 ```
 stack build
