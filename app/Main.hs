@@ -31,8 +31,7 @@ runStandard inputFilePath = do
 runRepl :: IO ()
 runRepl = forever $ do
   putStrLn "Please start typing commands"
-  _ <- runMaybeT $ runStateT (simulateFromStdin getCmdFromStdin) initRobotState
-  return ()
+  runMaybeT $ runStateT (simulateFromStdin getCmdFromStdin) initRobotState
 
 getCmdFromStdin :: IO String
 getCmdFromStdin = getLine
