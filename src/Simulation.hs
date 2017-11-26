@@ -9,7 +9,7 @@ import Parsers
 import IOReaders
 import Common
 
--- Type RobotState are defined in Common.hs
+-- Type RobotState is defined in Common.hs
 
 simulateFromStdin :: StdinReader -> RobotState
 simulateFromStdin stdinReader = forever $ do

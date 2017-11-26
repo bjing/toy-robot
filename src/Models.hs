@@ -65,9 +65,7 @@ mkPosition position =
   <*> mkCoord (y position)
 
 mkDirection :: Direction -> Validated Direction
-mkDirection direction = if True
-                        then _Success # direction
-                        else _Failure # [ OtherError ]
+mkDirection direction = _Success # direction
 
 mkRobotFromDetails :: Coord -> Coord -> Direction -> Validated Robot
 mkRobotFromDetails x y direction =

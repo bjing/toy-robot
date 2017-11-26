@@ -2,7 +2,7 @@
 
 ## Assumptions
 * All invalid commands will be ignored, not just commands that will result in an impossible position.
-* When reading from file, the executable will only accept one input file.
+* When reading from file, the executable will only accept one input file on each invocation.
 
 ## Prerequisite
 [Haskell Stack](https://docs.haskellstack.org/en/stable/README/)
