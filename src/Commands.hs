@@ -4,7 +4,6 @@ module Commands
   ) where
 
 import Control.Monad.Trans.State
-import Control.Monad.Trans.Maybe
 import Control.Monad
 
 import Models

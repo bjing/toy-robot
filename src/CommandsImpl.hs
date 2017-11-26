@@ -1,8 +1,6 @@
 module CommandsImpl where
 
 import Control.Monad.Trans.State
-import Control.Monad.Trans.Maybe
-import Control.Monad.Trans.Class
 import Control.Monad.IO.Class
 import Control.Monad
 import qualified Data.Map as M
