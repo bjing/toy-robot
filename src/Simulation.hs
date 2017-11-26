@@ -12,8 +12,8 @@ import Parsers
 import Models
 import Common
 
-type FileReader = FilePath -> IO [String]
 type StdinReader = IO String
+type FileReader = FilePath -> IO [String]
 
 -- Type RobotState is defined in Common.hs
 

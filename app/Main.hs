@@ -39,5 +39,4 @@ getCmdFromStdin = getLine
 getCmdFromFile :: FilePath -> IO [String]
 getCmdFromFile filePath = do
   content <- readFile filePath
-  let cmdStrs = lines content
-  return cmdStrs
+  return $ lines content
