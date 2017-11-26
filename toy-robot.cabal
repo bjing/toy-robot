@@ -19,7 +19,7 @@ library
                      , Models
                      , Parsers
                      , Commands
-                     , Helpers
+                     , Common
                      , Simulation
                      , CommandsImpl
                      , ParsersImpl

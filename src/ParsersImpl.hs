@@ -11,7 +11,7 @@ import Control.Lens
 import Data.Validation
 
 import Models
-import qualified Helpers as H
+import Common
 
 parsePlaceCommand :: T.Text -> Maybe Command
 parsePlaceCommand cmd = do
@@ -19,7 +19,7 @@ parsePlaceCommand cmd = do
   let itemList = T.strip <$> T.splitOn (T.singleton ',') details
 
   position <- parsePosition $ take 2 itemList
-  directionStr <- H.headMaybe $ reverse itemList
+  directionStr <- headMaybe $ reverse itemList
   direction <- parseDirection directionStr
   return $ PLACE position direction
 

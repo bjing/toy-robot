@@ -10,11 +10,9 @@ import Control.Lens
 import Data.Validation
 
 import Models
-import qualified Helpers as H
+import Common
 
--- A StateT stack is used so that we can easily update and get robot state without
--- explicitly passing it around
-type RobotState = StateT Robot (MaybeT IO) ()
+-- Type RobotState is defined in Common.hs
 
 moveRobot :: RobotState
 moveRobot = do
@@ -36,9 +34,8 @@ placeRobot pos dir = do
   robot <- get
   updateRobotStateIfNecessary $ mkRobot pos dir ^? _Success
 
-
-turnLeftMap = M.fromList[(NORTH, WEST), (WEST, SOUTH), (SOUTH, EAST), (EAST, NORTH)]
-turnRightMap = M.fromList[(NORTH, EAST), (WEST, NORTH), (SOUTH, WEST), (EAST, SOUTH)]
+turnLeftLookup = M.fromList[(NORTH, WEST), (WEST, SOUTH), (SOUTH, EAST), (EAST, NORTH)]
+turnRightLookup = M.fromList[(NORTH, EAST), (WEST, NORTH), (SOUTH, WEST), (EAST, SOUTH)]
 
 turn :: Command -> RobotState
 turn command = do
@@ -46,16 +43,19 @@ turn command = do
   let currentFacing = facing robot
   let pos = position robot
   let turnMap = case command of
-                       LEFT -> turnLeftMap
-                       RIGHT -> turnRightMap
-  newDirection <- H.liftMaybe $ M.lookup currentFacing turnMap
+                       LEFT -> turnLeftLookup
+                       RIGHT -> turnRightLookup
+  newDirection <- liftMaybe $ M.lookup currentFacing turnMap
   updateRobotStateIfNecessary $ mkRobot pos newDirection ^? _Success
 
+-- The report function directly gets the robot state and prints it.
+-- I don't like having I/O in this layer of the app, but I can't come up with a better solution
 report :: RobotState
 report = do
   robotState <- get
   liftIO $ print robotState
 
+-- This function is called when receiving an invalid command
 stayIdle :: RobotState
 stayIdle = return ()
 

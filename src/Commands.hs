@@ -9,6 +9,9 @@ import Control.Monad
 
 import Models
 import CommandsImpl
+import Common
+
+-- Type RobotState is defined in Common.hs
 
 runCommands :: [Maybe Command] -> RobotState
 runCommands cmds = do

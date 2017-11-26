@@ -10,9 +10,6 @@ import Control.Monad
 import System.Environment
 import qualified Data.Text as T
 
-import Lib
-import Commands
-import Parsers
 import Models
 import Simulation
 
@@ -20,11 +17,11 @@ main :: IO ()
 main = do
   args <- getArgs
   case args of
-    (inputFilePath:_) -> runStandard inputFilePath
+    (inputFilePath:_) -> runFromFile inputFilePath
     [] -> runRepl
 
-runStandard :: String -> IO ()
-runStandard inputFilePath = do
+runFromFile :: String -> IO ()
+runFromFile inputFilePath = do
   _ <- runMaybeT $ runStateT (simulateFromFile getCmdFromFile inputFilePath) initRobotState
   return ()
 
@@ -33,6 +30,9 @@ runRepl = forever $ do
   putStrLn "Please start typing commands"
   runMaybeT $ runStateT (simulateFromStdin getCmdFromStdin) initRobotState
 
+-- The following I/O functions are seprated out and passed into the simulation
+-- functions (simulateFromFile, simulateFromStdin) as arguments so the simulation functions
+-- can be unit-tested
 getCmdFromStdin :: IO String
 getCmdFromStdin = getLine
 

@@ -10,19 +10,21 @@ import qualified Data.Text as T
 import Commands
 import Parsers
 import Models
-import Lib
+import Common
 
 type FileReader = FilePath -> IO [String]
 type StdinReader = IO String
 
-simulateFromStdin :: StdinReader -> StateT Robot (MaybeT IO) ()
+-- Type RobotState is defined in Common.hs
+
+simulateFromStdin :: StdinReader -> RobotState
 simulateFromStdin stdinReader = forever $ do
   cmdStr <- liftIO stdinReader
   let cmd = parseCommand (T.pack cmdStr)
   runCommand cmd
 
-simulateFromFile :: FileReader -> FilePath -> StateT Robot (MaybeT IO) ()
-simulateFromFile reader filePath = do
-  cmdStrs <- liftIO $ reader filePath
+simulateFromFile :: FileReader -> FilePath -> RobotState
+simulateFromFile fileReader filePath = do
+  cmdStrs <- liftIO $ fileReader filePath
   let cmds = fmap (parseCommand . T.pack) cmdStrs
   runCommands cmds
